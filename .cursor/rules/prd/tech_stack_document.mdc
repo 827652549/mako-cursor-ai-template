@@ -1,0 +1,157 @@
+---
+alwaysApply: true
+---
+
+# Tech Stack Document for nextjs-mvp-starter-template
+
+This document explains, in simple everyday language, the technology choices behind the `nextjs-mvp-starter-template`. Each section covers a different part of the stack, why it was chosen, and how it helps you build MVPs quickly and reliably.
+
+## 1. Frontend Technologies
+
+The frontend is everything your users see and interact with. Here's what we use and why:
+
+*   **Next.js (App Router)** ✅ **已实现**
+
+    *   A React framework that handles page routing, data fetching, and server-side rendering all in one place.
+    *   Lets you mix server-rendered pages and interactive components for speed and smoothness.
+
+*   **React & TypeScript** ✅ **已实现**
+
+    *   React powers the interactive parts of your UI.
+    *   TypeScript adds type safety, catching mistakes early and making your code easier to understand.
+
+*   **shadcn/ui** ❌ **未实现（计划中）**
+
+    *   A set of unstyled component building blocks (buttons, forms, dialogs) you fully control.
+    *   Speeds up UI assembly while letting you customize every detail to match your brand.
+    *   **当前状态**: 项目只有基础 Button 组件，未集成 shadcn/ui。
+
+*   **Tailwind CSS v4** ✅ **已实现**
+
+    *   A utility-first styling tool that keeps styles consistent and keeps your CSS code small.
+    *   Works hand-in-hand with shadcn/ui to apply colors, layouts, and responsive designs quickly.
+
+*   **Dark Mode Support** ⚠️ **部分实现**
+
+    *   A pre-built toggle and theme system lets users switch between light and dark modes seamlessly.
+    *   **当前状态**: CSS 变量已定义，但缺少主题切换组件和持久化逻辑。
+
+## 2. Backend Technologies
+
+The backend powers your app's logic, data storage, and authentication. Here's what we chose:
+
+*   **Next.js API Routes** ✅ **已实现**
+
+    *   Lets you write server-side code (like an API) right alongside your frontend pages.
+    *   Simplifies project structure: you don't need a separate backend service.
+    *   **当前状态**: 基础结构已就绪，但尚未创建任何 API 路由。
+
+*   **Better Auth** ❌ **未实现（计划中）**
+
+    *   A ready-made authentication solution for user registration, login, and session handling.
+    *   Secure and production-ready, so you don't have to build auth flows from scratch.
+    *   **当前状态**: 未集成，项目中有基础的 apiClient 和 errorHandler 工具函数。
+
+*   **Drizzle ORM** ❌ **未实现（计划中）**
+
+    *   A TypeScript-friendly tool for talking to your database without raw SQL.
+    *   Ensures your queries are type-safe and catch errors at compile time.
+    *   **当前状态**: 未集成，项目中不存在 `/db` 目录。
+
+*   **PostgreSQL** ❌ **未实现（计划中）**
+
+    *   A powerful, open-source relational database for storing user data and your app's records.
+    *   Works seamlessly with Drizzle for migrations and queries.
+    *   **当前状态**: 未配置数据库连接。
+
+## 3. Infrastructure and Deployment
+
+These decisions help you set up, test, and ship your app consistently, no matter who's doing it or where it runs:
+
+*   **Docker & Docker Compose** ❌ **未实现（计划中）**
+
+    *   Containerizes both the Next.js app and PostgreSQL database.
+    *   With `docker-compose up`, you get an identical development environment on any machine.
+    *   **当前状态**: 项目中不存在 `docker-compose.yml` 或 `Dockerfile`。
+
+*   **Git & GitHub (or other Git service)**
+
+    *   Version control for tracking changes, collaborating, and rolling back if needed.
+    *   A central place for code reviews and pull requests.
+
+*   **CI/CD Pipeline Suggestions**
+
+    *   You can plug in GitHub Actions (or similar) to run tests and linting on every push.
+    *   Automates deployments to your hosting platform when code is merged.
+
+*   **Hosting Platforms**
+
+    *   You can deploy containers to services like Vercel, AWS, DigitalOcean, or any Docker-friendly host.
+    *   Ensures your app scales and stays up as you grow.
+
+## 4. Third-Party Integrations
+
+These extra services enhance the core features of your MVP:
+
+*   **Better Auth** (already included)
+
+    *   Handles secure user login and session management without additional code.
+
+*   *Optional Email Service* (Resend, SendGrid, etc.)
+
+    *   For password resets and email verification flows if you choose to add them.
+
+*   **Monitoring & Logging** (Sentry, Logtail)
+
+    *   For tracking errors in the wild and debugging issues quickly.
+    *   Can be enabled via environment variables in your Docker setup.
+
+*   *Optional Analytics* (Google Analytics, Plausible)
+
+    *   To gain insights into user behavior and make data-driven decisions.
+
+## 5. Security and Performance Considerations
+
+We’ve built in safeguards and speed optimizations so your MVP runs smoothly and stays safe:
+
+*   **TypeScript Everywhere**
+
+    *   Prevents many common bugs by checking your code as you write it.
+
+*   **Secure Auth Flows**
+
+    *   Better Auth handles password hashing, session cookies, and token management out of the box.
+
+*   **Server Components First**
+
+    *   Next.js renders as much as possible on the server, reducing client-side JavaScript and improving load times.
+
+*   **Data Caching**
+
+    *   Next.js data fetching and built-in cache options (e.g., `fetch` caching) speed up repeat page loads.
+
+*   **Rate Limiting (Optional)**
+
+    *   You can add middleware for API rate limits (e.g., `upstash/ratelimit`) to protect public endpoints.
+
+*   **Environment Variables**
+
+    *   Secrets (database URLs, auth keys) are kept out of your code by using `.env` files and Docker secrets.
+
+## 6. Conclusion and Overall Tech Stack Summary
+
+**当前项目状态**: 这是一个**基础模板**，已实现核心框架，但尚未集成完整的功能栈。
+
+**已实现:**
+*   **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS v4
+*   **Testing:** Jest + React Testing Library
+*   **Code Organization:** 清晰的目录结构（components, hooks, services, utils）
+
+**计划实现（PRD 中定义）:**
+*   **Frontend:** shadcn/ui, dark mode toggle
+*   **Backend:** Better Auth, Drizzle ORM, PostgreSQL
+*   **Infra & Deployment:** Docker & Docker Compose
+*   **Third-Party:** Ready-made auth, optional email, monitoring, analytics
+*   **Security & Performance:** Type safety, secure auth, server-first rendering, caching, rate limiting
+
+**注意**: 当前项目是一个起始模板，为后续功能扩展提供了良好的基础架构。开发者可以根据 PRD 文档逐步添加所需功能。

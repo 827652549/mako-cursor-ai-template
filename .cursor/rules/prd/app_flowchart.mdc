@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+
+flowchart TD\n\n  Start[Start] --> Landing[Landing Page]\n  Landing --> AuthButtons[Auth Buttons]\n  AuthButtons --> AuthCheck{Is user authenticated?}\n  AuthCheck -->|No| Login[Login or Register]\n  AuthCheck -->|Yes| Dashboard[Dashboard]\n  Login --> AuthClient[Auth Client Hook]\n  AuthClient --> AuthAPI[Auth API Route]\n  AuthAPI --> DB[Drizzle ORM Postgres]\n  DB --> AuthAPI\n  AuthAPI --> AuthClient\n  AuthClient --> Dashboard\n  Dashboard --> FeatureBlueprint[Feature Blueprint]\n  FeatureBlueprint --> UIComponent[UI Component]\n  UIComponent --> FeatureHook[Feature Client Hook]\n  FeatureHook --> FeatureAPI[Feature API Route]\n  FeatureAPI --> DB\n  DB --> FeatureAPI

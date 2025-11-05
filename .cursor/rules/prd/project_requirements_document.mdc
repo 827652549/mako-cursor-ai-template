@@ -1,0 +1,142 @@
+# Project Requirements Document: nextjs-mvp-starter-template
+
+## 1. Project Overview
+
+**Summary** The `nextjs-mvp-starter-template` is a drop-in foundation for quickly launching full-stack Next.js applications with minimal setup. It addresses the common pain points of bootstrapping an MVP (Minimum Viable Product)—from authentication and database schema to theming and environment consistency—so you can dive straight into building unique business logic instead of wrestling with boilerplate.
+
+**Purpose & Success Criteria** This template is being built to:
+
+1.  Eliminate repetitive setup work for new projects.
+2.  Provide battle-tested, production-ready solutions for core features (auth, data layer, UI).
+3.  Ensure every new MVP starts with a modern, accessible design and a reproducible development environment.
+
+Success will be measured by how quickly a developer can spin up a working Next.js app (aim: under 5 minutes), register a user, and see a styled dashboard—all with one command (`docker-compose up`).
+
+## 2. In-Scope vs. Out-of-Scope
+
+### In-Scope (v1)
+
+*   **Authentication**: User registration, login, session management via Better Auth.
+*   **Database**: Type-safe Drizzle ORM integration with PostgreSQL, including pre-built `auth` schema.
+*   **UI Foundation**: shadcn/ui primitives + Tailwind CSS v4 for responsive, accessible components.
+*   **Theming**: Built-in dark/light mode toggle with persistent user preference.
+*   **Routing**: Next.js App Router for file-based page and API route organization.
+*   **Containerization**: Docker Compose setup for Next.js + PostgreSQL with one-command launch.
+*   **Code Organization**: Clear folders (`/app`, `/db`, `/components`, `/lib`) and feature blueprint (`/app/dashboard`).
+
+### Out-of-Scope (Phase 1)
+
+*   ~~Automated test suite (Jest/React Testing Library).~~ ✅ **已完成** - Jest 和 React Testing Library 已配置
+*   Email verification, password-reset flows, social logins (OAuth).
+*   Advanced caching or server-side rate limiting.
+*   State management beyond React context/hooks.
+*   Built-in database migration scripts (e.g., drizzle-kit migrations).
+*   Error logging services (Sentry, Logtail) integration.
+
+### 当前项目状态（实际）
+
+**注意：** 当前项目是一个**基础模板**，尚未实现以下功能（这些功能在 PRD 中列为 In-Scope，但实际未实现）：
+
+*   **Authentication**: Better Auth - ❌ 未实现
+*   **Database**: Drizzle ORM + PostgreSQL - ❌ 未实现
+*   **UI Foundation**: shadcn/ui - ❌ 未实现（当前只有基础 Button 组件）
+*   **Theming**: Dark mode toggle - ❌ 未实现（只有 CSS 变量定义）
+*   **Containerization**: Docker Compose - ❌ 未实现
+*   **Feature Blueprint**: `/app/dashboard/` - ❌ 未实现
+
+**已实现的功能：**
+*   ✅ Next.js App Router 基础结构
+*   ✅ TypeScript 配置
+*   ✅ Tailwind CSS v4
+*   ✅ Jest + React Testing Library 测试配置
+*   ✅ 基础组件结构（components, hooks, services, utils）
+*   ✅ 基础工具函数（apiClient, errorHandler）
+
+## 3. User Flow
+
+**New Visitor to Dashboard**
+
+1.  A user visits the homepage (`/`). They see a clean landing page with a header, a dark mode toggle, and links to "Sign Up" and "Log In."
+2.  They click "Sign Up," fill in email and password, and submit. The form calls the Better Auth API route. On success, the user is redirected to `/dashboard`.
+
+**Returning User Experience**
+
+1.  A returning user selects "Log In," enters credentials, and is authenticated via the same API route.
+2.  After login, they arrive at `/dashboard`: a layout with a left sidebar (links to Dashboard, Profile, Settings) and a main area showing a welcome message, recent activity, and placeholder cards.
+3.  The user can toggle dark/light mode at any time; their preference is saved and applied on subsequent visits.
+
+## 4. Core Features
+
+*   **User Authentication**\
+    • Secure registration, login, logout, session handling (Better Auth).\
+    • API routes under `/app/api/auth/[...all]/route.ts`.
+*   **Database Integration**\
+    • Drizzle ORM + PostgreSQL.\
+    • Pre-configured `auth` schema in `/db/schema/auth.ts`.
+*   **UI Component Library**\
+    • Unstyled primitives from shadcn/ui in `/components/ui`.\
+    • Utility classes via Tailwind CSS v4.
+*   **Dark Mode & Theming**\
+    • Theme toggle component, context hook, and cookie persistence.
+*   **Routing & Layouts**\
+    • Next.js App Router with nested layouts: global (`/app/layout.tsx`), dashboard (`/app/dashboard/layout.tsx`).
+*   **One-Command Docker Setup**\
+    • `docker-compose.yml` for Next.js server and Postgres instance.\
+    • `.env.example` for required environment variables.
+*   **Feature Blueprint**\
+    • Example `/app/dashboard/` directory to guide adding new sections (e.g., `/app/dashboard/products`).
+
+## 5. Tech Stack & Tools
+
+*   **Frontend**: Next.js (App Router), React, TypeScript ✅
+*   **Styling**: Tailwind CSS v4 ✅, shadcn/ui component primitives ❌（计划中）
+*   **Backend**: Next.js API Routes ✅, Better Auth ❌（计划中）, Drizzle ORM ❌（计划中）
+*   **Database**: PostgreSQL container ❌（计划中）
+*   **Containerization**: Docker, Docker Compose ❌（计划中）
+*   **Testing**: Jest & React Testing Library ✅（已配置）
+*   **Development**: Node.js LTS (v18+), Bun/npm/Yarn, VS Code (recommended) ✅
+
+*Future Extensions (not in v1 but planned)*
+
+*   ~~Testing: Jest & React Testing Library~~ ✅ **已完成**
+*   Validation: Zod + react-hook-form
+*   State Management: Zustand or Jotai
+*   Monitoring: Sentry / Logtail
+*   Rate Limiting: upstash/ratelimit middleware
+
+## 6. Non-Functional Requirements
+
+*   **Performance**:\
+    • Cold start of app < 2 seconds.\
+    • API response times < 200 ms under average load.
+*   **Security**:\
+    • HTTPS assumed in production.\
+    • Passwords hashed by Better Auth.\
+    • Environment variables not checked into Git.
+*   **Usability**:\
+    • Responsive UI (mobile to desktop).\
+    • Accessible components (ARIA attributes, keyboard navigation).
+*   **Scalability**:\
+    • Modular folder structure to add new features without conflict.\
+    • TypeScript types across server/client for safer refactors.
+
+## 7. Constraints & Assumptions
+
+*   **Environment**: Docker and Docker Compose must be installed locally.
+*   **Dependencies**: Better Auth, Drizzle ORM, shadcn/ui must remain compatible with Next.js version.
+*   **Assumptions**:\
+    • Developers are familiar with Git, Node.js, and basic Docker commands.\
+    • PostgreSQL container will run on the default port (5432).
+
+## 8. Known Issues & Potential Pitfalls
+
+*   **Database Migrations**: Drizzle doesn’t auto-generate migration SQL.\
+    *Mitigation*: In v1, document how to manually sync schema or integrate `drizzle-kit` later.
+*   **Env Var Management**: Missing or misnamed `.env` entries will break auth or DB connection.\
+    *Mitigation*: Provide a robust `README.md` with a sample `.env.example` and clear instructions.
+*   **Docker Networking**: If another service occupies port 5432, the Postgres container will fail.\
+    *Mitigation*: Allow users to override ports via environment variables.
+*   **Styling Conflicts**: Customizing shadcn/ui components without understanding Tailwind may lead to CSS specificity issues.\
+    *Mitigation*: Include a brief style-override guide in documentation.
+
+This document serves as the single source of truth for the `nextjs-mvp-starter-template`. It outlines every core piece—features, tech choices, user journey, and potential pitfalls—so AI-powered or human-driven technical specifications can be generated unambiguously.

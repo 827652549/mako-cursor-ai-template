@@ -1,0 +1,187 @@
+---
+alwaysApply: true
+---
+
+# Backend Structure Document for nextjs-mvp-starter-template
+
+This document explains the backend setup of the Next.js MVP Starter Template in everyday language. It covers how the system is built, how data is stored and accessed, how it’s hosted, and what tools keep it secure and running smoothly.
+
+## 1. Backend Architecture
+
+Overall, the backend is a simple, service-oriented Node.js application built into Next.js using the App Router. Here's how it's organized:
+
+*   Framework: Next.js App Router handles both server-side rendering and API routes in one place. ✅ **已配置**
+*   Language: TypeScript throughout ensures type safety and fewer runtime errors. ✅ **已配置**
+*   Design Pattern: File-based routing means each folder in `/app/api` or `/app/` directly becomes an API endpoint or page. ✅ **基础结构已就绪**
+*   Authentication: Better Auth library abstracts away the details of user sessions, registration, and login flows. ❌ **未实现（计划中）**
+
+**当前状态**: 
+*   项目具有 Next.js App Router 基础结构
+*   存在 `/src/app/` 目录用于页面路由
+*   尚未创建 `/src/app/api/` 目录和任何 API 路由
+*   存在基础的 `apiClient` 和 `errorHandler` 工具函数，但尚未集成认证系统
+
+How this supports:
+
+*   Scalability: Each API route runs in its own isolated function, so you can scale specific endpoints independently.
+*   Maintainability: Clear folder structure (routes, database code, utilities, components) makes it easy for any developer to find and change code.
+*   Performance: Server components fetch data on the server, reducing bundle size in the browser and speeding up initial load.
+
+## 2. Database Management
+
+**当前状态**: ❌ **未实现（计划中）**
+
+The project plans to use a relational database with a type-safe ORM:
+
+*   Type: SQL
+*   System: PostgreSQL（计划中）
+*   ORM: Drizzle ORM for writing queries in TypeScript and mapping results to objects.（计划中）
+
+**计划的数据存储和访问方式:**
+
+*   Schema files (`/db/schema/*.ts`) will define tables and columns in code.
+*   Drizzle will generate SQL queries at build time, catching errors early.
+*   Database connections will be managed via environment variables (`DATABASE_URL`), keeping credentials out of code.
+*   Common practices: connection pooling for performance, migration files (via `drizzle-kit`) to version control changes, and a development seed script for quick setup.
+
+**注意**: 当前项目中不存在 `/db` 目录，也没有数据库配置文件。
+
+## 3. Database Schema
+
+**Human-Readable Explanation**
+
+*   **Users**: Stores each user’s name, email, hashed password, profile image URL, and timestamps.
+*   **Accounts**: Links a user to their OAuth provider details (e.g., Google, GitHub).
+*   **Sessions**: Tracks active sessions with tokens and expiration dates.
+*   **VerificationTokens**: Holds one-time tokens used for email verification or password resets.
+
+**PostgreSQL Schema (SQL)**
+
+`CREATE TABLE users ( id SERIAL PRIMARY KEY, name TEXT, email TEXT UNIQUE NOT NULL, email_verified TIMESTAMPTZ, image TEXT, created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW() ); CREATE TABLE accounts ( id SERIAL PRIMARY KEY, user_id INTEGER REFERENCES users(id) ON DELETE CASCADE, type TEXT NOT NULL, provider TEXT NOT NULL, provider_account_id TEXT NOT NULL, refresh_token TEXT, access_token TEXT, expires_at INTEGER, token_type TEXT, scope TEXT, created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW() ); CREATE TABLE sessions ( id SERIAL PRIMARY KEY, session_token TEXT UNIQUE NOT NULL, user_id INTEGER REFERENCES users(id) ON DELETE CASCADE, expires TIMESTAMPTZ NOT NULL, created_at TIMESTAMPTZ DEFAULT NOW() ); CREATE TABLE verification_tokens ( identifier TEXT NOT NULL, token TEXT UNIQUE NOT NULL, expires TIMESTAMPTZ NOT NULL ); -- Indexes CREATE INDEX idx_sessions_user_id ON sessions(user_id); CREATE INDEX idx_accounts_user_id ON accounts(user_id);`
+
+## 4. API Design and Endpoints
+
+**当前状态**: ❌ **未实现（计划中）**
+
+The backend will expose RESTful endpoints under `/app/api` (planned):
+
+*   **/api/auth/[...all]**: All authentication actions (sign in, sign up, sign out, callbacks) will be handled here by Better Auth.（计划中）
+
+*   **/api/users** (planned):
+
+    *   GET: List or fetch current user profile.
+    *   PUT: Update user details (e.g., name, image).
+
+*   **/api/projects** (example feature, planned):
+
+    *   GET: Return all projects for the current user.
+    *   POST: Create a new project record.
+    *   GET /:id: Fetch a single project.
+    *   PATCH /:id: Update project details.
+    *   DELETE /:id: Remove a project.
+
+**当前存在的工具函数:**
+*   `src/utils/apiClient.ts` - 基础的 API 客户端，支持 GET/POST/PUT/DELETE
+*   `src/utils/errorHandler.ts` - 错误处理工具，支持 API 错误码映射
+*   `src/services/userService.ts` - 用户服务示例（使用 apiClient）
+
+**计划的设计原则:**
+*   Request validation and parsing will happen in each route file (you can integrate Zod for schema validation).
+*   Responses will use JSON with consistent structure: `{ success: boolean, data: ..., error?: string }`.
+*   Authentication middleware will ensure only logged-in users can access protected routes.
+
+## 5. Hosting Solutions
+
+The template is containerized for easy deployment:
+
+*   **Docker & Docker Compose**: One-command setup for both development and production images.
+
+*   **Cloud Providers** (examples):
+
+    *   AWS ECS/Fargate: Run containers at scale without managing servers.
+    *   Vercel (with Docker): Quick deployments with a built-in CDN and SSL.
+    *   DigitalOcean App Platform: Straightforward container hosting.
+
+Benefits:
+
+*   Reliability: Containers run the same everywhere.
+*   Scalability: You can spin up multiple container instances behind a load balancer.
+*   Cost-Effectiveness: Only pay for what you use, and you can scale down in quiet hours.
+
+## 6. Infrastructure Components
+
+These pieces work together to make the application fast and resilient:
+
+*   **Load Balancer**: Distributes requests across multiple container instances (e.g., AWS ALB, NGINX).
+
+*   **Caching**:
+
+    *   In-memory: Next.js’s built-in response caching and ISR (Incremental Static Regeneration).
+    *   External: Optionally add Redis for session or query caching.
+
+*   **CDN**: A global content delivery network (e.g., Vercel CDN, Cloudflare) to serve static assets close to users.
+
+*   **Database Hosting**: Managed PostgreSQL (e.g., AWS RDS, Neon, Supabase) with automated backups and failover.
+
+## 7. Security Measures
+
+User data and credentials are protected through:
+
+*   **Transport Security**: HTTPS/TLS enforced at the load balancer or CDN level.
+*   **Authentication & Authorization**: Better Auth handles secure sessions, password hashing, and OAuth flows.
+*   **Environment Variables**: Secrets (API keys, database URLs) live in `.env` files or your cloud provider’s secret manager—not in code.
+*   **Data Encryption**: Data in transit is encrypted. For compliance, consider enabling encryption at rest on your database.
+*   **Rate Limiting & CORS**: Add middleware to prevent abuse and restrict origins.
+*   **Audit Logging**: Optionally integrate a logging service (Sentry, Logtail) to track suspicious activity.
+
+## 8. Monitoring and Maintenance
+
+Keeping the backend healthy involves:
+
+*   **Logging & Alerts**:
+
+    *   Use a hosted logging service (e.g., Logtail, Sentry) to capture errors and slow requests.
+    *   Set up alerts on error rate, latency spikes, or container health failures.
+
+*   **Metrics & Dashboards**:
+
+    *   Collect CPU, memory, and request throughput metrics (e.g., Prometheus + Grafana or cloud-native tools).
+
+*   **Health Checks**:
+
+    *   Docker health checks on the web service to auto-restart unhealthy containers.
+
+*   **Database Maintenance**:
+
+    *   Regularly run migrations in staging before production.
+    *   Monitor slow queries and add indexes as needed.
+
+*   **Dependency Updates**:
+
+    *   Use a tool like Dependabot to keep libraries up to date and patched.
+
+## 9. Conclusion and Overall Backend Summary
+
+**当前项目状态**: 这是一个**基础模板**，已建立核心架构，但后端功能尚未完全实现。
+
+**已实现的基础设施:**
+*   ✅ Next.js App Router 框架结构
+*   ✅ TypeScript 类型安全
+*   ✅ 基础 API 客户端工具（apiClient）
+*   ✅ 错误处理工具（errorHandler）
+*   ✅ 服务层结构示例（userService）
+
+**计划实现的后端功能:**
+*   ❌ Type-safe, production-ready database layer with Drizzle and PostgreSQL
+*   ❌ Prebuilt authentication powered by Better Auth
+*   ❌ Containerized development and deployment with Docker
+*   ❌ API routes under `/app/api`
+
+**下一步开发建议:**
+1. 创建 `/src/app/api/` 目录结构
+2. 集成 Better Auth 认证系统
+3. 配置 Drizzle ORM 和 PostgreSQL
+4. 创建 Docker 配置文件
+5. 实现 API 路由和中间件
+
+With this foundation in place, developers can build upon it to add the core backend features described in this document.

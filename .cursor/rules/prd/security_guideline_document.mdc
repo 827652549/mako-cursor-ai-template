@@ -1,0 +1,109 @@
+# Security Guidelines for nextjs-mvp-starter-template
+
+This document provides a comprehensive set of security guidelines tailored to the [nextjs-mvp-starter-template](https://github.com/your-org/nextjs-mvp-starter-template). It is structured according to industry-standard security principles and details how each principle applies to this template, along with actionable recommendations for extension or hardening.
+
+## 1. Security by Design
+
+*   **Embed Security in Architecture**\
+    • Adopt a threat-modeling mindset: identify sensitive assets (user credentials, PII) and potential attack vectors (API abuse, injection).\
+    • Use the Next.js App Router to enforce consistent security middleware at the edge (e.g., authentication checks, rate limiting).
+*   **Fail Securely**\
+    • Provide default error pages that do not reveal stack traces or internal paths (`/app/error.tsx`).\
+    • Ensure `NODE_ENV=production` disables all debug/logging endpoints and verbose error output.
+*   **Secure Defaults**\
+    • All cookies (`__Secure-next-auth.session-token`) must be `HttpOnly`, `Secure`, and `SameSite=Lax` by default.\
+    • Default CORS policy should only allow the application origin and explicitly deny all others.
+
+## 2. Authentication & Access Control
+
+*   **Better Auth Integration**\
+    • Ensure password hashing uses Argon2 or bcrypt with unique per-user salts. Do not accept plaintext or MD5.\
+    • Enforce strong password policies: minimum length ≥ 12, complexity (uppercase, lowercase, numbers, symbols), optional rotation for high-sensitivity projects.
+*   **Session Management**\
+    • Issue session tokens with secure, unpredictable IDs.\
+    • Set both idle and absolute timeouts (e.g., 15 min idle, 24 h absolute).\
+    • Provide logout endpoint that invalidates server-side sessions immediately.
+*   **RBAC & MFA**\
+    • Define roles (`user`, `admin`, etc.) in the Drizzle schema (`/db/schema/auth.ts`) and check roles in all sensitive API routes (`/app/api/*`).\
+    • Offer optional MFA (TOTP via `speakeasy` or similar) for privileged accounts. Store shared secrets encrypted at rest.
+
+## 3. Input Handling & Processing
+
+*   **Server-Side Validation**\
+    • Use Zod to define input schemas for React Hook Form on the client and reuse the same schemas in API routes (`/app/api/…/route.ts`).
+*   **Prevent Injection Attacks**\
+    • Always use Drizzle ORM’s parameterized queries—never string-concatenate SQL.\
+    • Sanitize any dynamic values before including them in file paths or shell commands.
+*   **File Upload Security**\
+    • Validate file mime types and extensions.\
+    • Store uploads outside the Next.js build directory, with randomized filenames.\
+    • Scan with a malware scanner (e.g., ClamAV) in a CI step.
+
+## 4. Data Protection & Privacy
+
+*   **Encryption in Transit & at Rest**\
+    • Enforce HTTPS (TLS 1.2+) with `Strict-Transport-Security`.\
+    • Use AES-256 for any application-level data encryption.\
+    • Enable database encryption (e.g., AWS RDS encryption) for PostgreSQL.
+*   **Secrets Management**\
+    • Do *not* hardcode keys in `.env`. Use a vault (AWS Secrets Manager, HashiCorp Vault) and inject at runtime.\
+    • Audit access logs for any secret retrieval.
+*   **PII Handling**\
+    • Mask or redact PII in logs.\
+    • Implement a data-deletion endpoint to satisfy GDPR/CCPA subject rights.
+
+## 5. API & Service Security
+
+*   **Rate Limiting & Throttling**\
+    • Integrate Upstash Rate Limit middleware on all public endpoints to mitigate brute-force and DoS attacks.
+*   **CORS & CSRF**\
+    • Configure CORS to allow only trusted origins (`VITE_ALLOWED_ORIGINS`).\
+    • Use the built-in Next.js CSRF token (`next-auth` or a synchronizer token) for all state-changing requests.
+*   **Versioning & Minimizing Exposure**\
+    • Prefix APIs with `/api/v1/`.\
+    • Return only the fields the client needs—avoid exposing internal IDs or permissions unnecessarily.
+
+## 6. Web Application Security Hygiene
+
+*   **Security Headers**\
+    • `Content-Security-Policy`: restrict sources for scripts, styles, images.\
+    • `X-Frame-Options: DENY` or `frame-ancestors 'none'` in CSP to prevent clickjacking.\
+    • `X-Content-Type-Options: nosniff`, `Referrer-Policy: same-origin`.
+*   **Subresource Integrity (SRI)**\
+    • Lock down any third-party CDN assets (e.g., tailwindcss CDN) by including integrity hashes.
+*   **Client-Side Storage**\
+    • Avoid storing JWTs or PII in `localStorage`/`sessionStorage`. Use `HttpOnly` cookies instead.
+
+## 7. Infrastructure & Configuration Management
+
+*   **Container Hardening**\
+    • Run Node as a non-root user in Docker.\
+    • Regularly update base images (e.g., `node:18-alpine`) and rebuild images in CI.
+*   **Network & Ports**\
+    • Expose only ports `3000` (app) and `5432` (db) on internal networks.\
+    • Implement a firewall or cloud security group to restrict access to the database.
+*   **CI/CD Security**\
+    • Store all credentials (Docker Hub tokens, vault credentials) in a secure CI secret store.\
+    • Scan container images and code dependencies for known CVEs before each deployment.
+
+## 8. Dependency Management
+
+*   **Lockfiles & SCA**\
+    • Commit `package-lock.json`.\
+    • Integrate Dependabot or GitHub Advanced Security to scan for vulnerable dependencies and auto-open PRs for upgrades.
+*   **Minimize Footprint**\
+    • Audit `node_modules` and remove unused dependencies.\
+    • Prefer lightweight libraries (e.g., Zod vs. full validation frameworks).
+
+## 9. Testing & Monitoring
+
+*   **Security Testing**\
+    • Add Jest + React Testing Library for unit tests of critical logic (auth, input validation).\
+    • Integrate a SAST tool (e.g., ESLint security plugin) and a DAST tool (e.g., OWASP ZAP) in the CI pipeline.
+*   **Logging & Alerting**\
+    • Centralize error and audit logs with a service like Sentry or Logtail.\
+    • Monitor for unusual patterns (e.g., repeated failed logins) and send alerts.
+
+By following these guidelines, you will ensure that every MVP built upon the nextjs-mvp-starter-template is secure by design, resilient in production, and adheres to industry best practices.
+
+*Security is a continuous process—regular reviews, testing, and updates are essential to maintain a robust posture.*

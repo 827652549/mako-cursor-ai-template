@@ -15,20 +15,26 @@ alwaysApply: true
     - React 19
     - Eslint
     - TypeScript
-    - Tailwind
+    - Tailwind CSS v4
 - 后端：
-    - 简单模块使用Node.js模块
-    - 复杂模块使用Express
+    - Next.js API Routes（Next.js 内置 API 路由）
+    - 当前未集成 Express（未来如需复杂路由可考虑）
 - 数据库：
-    - PostgreSQL
-    - 按需使用 Redis
-    - 按需使用 SQLite
+    - 当前未配置数据库
+    - 计划使用 PostgreSQL（通过 Drizzle ORM）
+    - 按需使用 Redis（缓存）
+    - 按需使用 SQLite（开发/测试）
+- 测试：
+    - Jest + React Testing Library（已配置）
 - 部署：
-    - Docker
+    - Docker（计划中，当前未配置）
 - 其他:
-    - 依赖安装使用 Bun
+    - 依赖安装使用 Bun（推荐）或 npm/yarn
 
 ## 项目结构
+
+每一个目录都应该有对应的README.MD文档, 简要说明目录的职能, 以及告知什么情况下应该编辑此目录的内容
+
 - `src/` - 源代码目录，包含：
     - `app/` - Next.js App Router 路由和页面
     - `components/` - React 组件

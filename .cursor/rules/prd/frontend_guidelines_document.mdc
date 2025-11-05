@@ -1,0 +1,117 @@
+# Frontend Guideline Document
+
+This document explains how the **nextjs-mvp-starter-template** is built on the frontend. It covers architecture, design principles, styling, component structure, state management, routing, performance, testing, and more. Anyone reading this—regardless of technical background—will understand how to work with and extend the template for rapid MVP development.
+
+## Frontend Architecture
+
+### Overview
+- **Framework:** Next.js (App Router) with React Server Components and Client Components. This gives you both server-side rendering and client-side interactivity in a single codebase.
+- **Language:** TypeScript, so your code is type-checked and less prone to errors.
+- **UI Toolkit:** `shadcn/ui` for unstyled, accessible primitives, combined with Tailwind CSS v4 for utility-based styling.
+- **Authentication:** Better Auth handles sign-up, login, session management, and secure API middleware.
+- **Database Layer:** Drizzle ORM talking to PostgreSQL with type-safe schemas.
+- **Containerization:** Docker Compose brings up Next.js and PostgreSQL with one command (`docker-compose up`).
+
+### Why This Architecture Works
+- **Scalability:** File-based routing and modular folders let you add new features without tangled code.
+- **Maintainability:** TypeScript ensures consistency, and separating UI, logic, and data layers keeps each part easy to understand.
+- **Performance:** Server-first rendering with Next.js Server Components means pages load fast, and you avoid shipping unnecessary JavaScript to the browser.
+
+## Design Principles
+
+1. **Usability:** Simple, clear interfaces. Users should understand each screen at a glance.
+2. **Accessibility:** All components follow WAI-ARIA guidelines. Keyboard navigation, focus states, and screen-reader labels are in place.
+3. **Responsiveness:** Layouts adapt smoothly from mobile to desktop using Tailwind’s responsive utilities.
+4. **Consistency:** Shared colors, spacing, and typography ensure a unified look.
+5. **Extensibility:** Components and logic are built to be copied or swapped out in new MVPs.
+
+**How We Apply Them:**
+- Buttons and forms use consistent padding and focus rings.
+- Color contrast meets WCAG AA standards.
+- Breakpoints at `sm`, `md`, `lg`, and `xl` ensure fluid layouts.
+
+## Styling and Theming
+
+### Approach
+- **Utility-First CSS:** Tailwind CSS v4 for fast, atomic classes (`px-4`, `text-gray-700`, `dark:bg-gray-800`, etc.).
+- **Component Primitives:** `shadcn/ui` provides unstyled React components you style with Tailwind.
+
+### Theming
+- **Dark Mode:** Built-in toggle. Uses Tailwind’s `dark:` variants and persists the user’s preference in local storage.
+- **Global Styles:** Defined in `app/globals.css` with base resets and theme variables.
+
+### Visual Style
+- **Overall Look:** Modern flat design with clean lines and subtle shadows.
+- **Color Palette:**
+  - Primary: #2563EB (blue-600)
+  - Secondary: #10B981 (green-500)
+  - Accent: #F59E0B (amber-500)
+  - Background Light: #F9FAFB (gray-50)
+  - Background Dark: #111827 (gray-900)
+  - Surface (cards, panels): #FFFFFF / #1F2937
+  - Text Light: #111827
+  - Text Dark: #E5E7EB
+
+- **Font:** Inter, system-ui fallback. Provides a neutral, legible base.
+
+## Component Structure
+
+- **Directory Layout:**
+  - `/app` – Page and layout definitions matching your URL structure.
+  - `/components` – Shared React components (buttons, cards, forms).
+  - `/components/ui` – Core UI primitives from `shadcn/ui`.
+  - `/lib` – Utility functions (e.g., auth client, formatters).
+  - `/db` – Drizzle ORM schemas.
+
+- **Reusability:** Each component lives in its own folder with an optional sub-folder for related styles or tests. This makes copying or swapping them in new MVPs trivial.
+
+- **Why Component-Based:** Breaking UI into self-contained pieces means you can:
+  - Test each piece individually.
+  - Update one part without affecting others.
+  - Reuse common elements across pages.
+
+## State Management
+
+- **Built-In:** 
+  - Local state with React’s `useState` and `useReducer`.
+  - Shared state via React Context (e.g., theme context, auth context).
+
+- **When to Extend:** For more complex scenarios (multi-step forms, complex dashboards), you can integrate a lightweight state library like **Zustand** or **Jotai**. The template’s folder structure is already prepared to add a `store` directory for such libraries.
+
+## Routing and Navigation
+
+- **Next.js App Router:** File-based in the `/app` folder. Each folder with a `page.tsx` file becomes a route.
+- **Nested Layouts:** Define shared layouts (headers, sidebars) in `layout.tsx` files at various levels.
+- **API Routes:** Under `/app/api`, you’ll find your auth endpoints and any other serverless functions you add.
+- **Navigation Components:** Use the `Link` component from `next/link` for client-side transitions.
+
+## Performance Optimization
+
+1. **Server Components by Default:** Pages fetch data on the server and send ready-to-render HTML to the client.
+2. **Code Splitting:** Each page or layout only loads the JavaScript it needs.
+3. **Image Optimization:** Next.js `Image` component automatically resizes and optimizes images.
+4. **Lazy Loading:** Use `dynamic()` to defer loading of heavy components or charts.
+5. **Asset Minification:** Turned on by default in Next.js production builds.
+6. **Caching:** Leverage Next.js’s `fetch` cache and CDN headers to speed up repeated data loads.
+
+## Testing and Quality Assurance
+
+- **Unit Tests:** Use **Jest** and **React Testing Library**. Write tests for utility functions and individual components.
+- **Integration Tests:** Combine multiple components or pages to ensure they work together. Example: a form component plus its submission handler.
+- **End-to-End Tests:** Use **Cypress** or **Playwright** to simulate user flows (login, dashboard navigation).
+- **Linting & Formatting:** ESLint with the Next.js plugin and Prettier enforce code style and catch bugs early.
+- **Continuous Integration:** Set up a CI pipeline (GitHub Actions) to run linting, tests, and type checks on every pull request.
+
+## Conclusion and Overall Frontend Summary
+
+This template brings together best-in-class tools—Next.js, TypeScript, shadcn/ui, Tailwind CSS, Better Auth, Drizzle ORM, and Docker—to give you a rock-solid starting point for any MVP. You get:
+
+- A well-organized, scalable architecture.
+- Clear design principles for usability, accessibility, and consistency.
+- A modern, flat visual style with built-in dark mode.
+- Reusable, testable components.
+- Simple state management and routing conventions.
+- Built-in performance optimizations and an easy path to add more.
+- A testing foundation that you can expand.
+
+Everything is set up so you can focus on building the unique features of your MVP, rather than reinventing the same foundations. Happy building!
