@@ -41,7 +41,7 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __IsExpected<Specific extends AppPageConfig<"/">> = Specific
   const handler = {} as typeof import("../../app/page.js")
   type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
+  // @ts-expect-error - 类型检查，不需要实际使用
   type __Unused = __Check
 }
 
@@ -56,6 +56,6 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __IsExpected<Specific extends LayoutConfig<"/">> = Specific
   const handler = {} as typeof import("../../app/layout.js")
   type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
+  // @ts-expect-error - 类型检查，不需要实际使用
   type __Unused = __Check
 }

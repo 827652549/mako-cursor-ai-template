@@ -30,6 +30,10 @@ alwaysApply: true
     - Docker（计划中，当前未配置）
 - 其他:
     - 依赖安装使用 Bun（推荐）或 npm/yarn
+- 代码质量:
+    - ESLint 代码检查（必须通过）
+    - 运行 `npm run lint` 或 `bun run lint` 检查代码
+    - 提交代码前必须确保 lint 检查通过
 
 ## 项目结构
 

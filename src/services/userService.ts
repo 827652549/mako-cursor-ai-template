@@ -1,5 +1,5 @@
 import { apiClient } from '@/utils/apiClient';
-import { handleApiError, parseApiError } from '@/utils/errorHandler';
+import { handleApiError } from '@/utils/errorHandler';
 
 /**
  * 用户数据类型

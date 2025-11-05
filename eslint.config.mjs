@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Jest 配置文件使用 CommonJS，应该被忽略
+    "jest.config.js",
+    "jest.setup.js",
+    // Next.js 自动生成的类型验证文件
+    "types/validator.ts",
   ]),
 ]);
 
