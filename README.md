@@ -1,0 +1,1 @@
+# Cursor 空白 NextJS 应用模版

@@ -1,0 +1,35 @@
+---
+alwaysApply: true
+---
+# 项目概览
+
+## 项目名称
+[Mako Cursor AI Web应用模版]
+
+## 项目描述
+[用于快速构建一个MVP应用的模版]
+
+## 技术栈
+- 前端：
+    - NextJS 16
+    - React 19
+    - Eslint
+    - TypeScript
+    - Tailwind
+- 后端：
+    - 简单模块使用Node.js模块
+    - 复杂模块使用Express
+- 数据库：
+    - PostgreSQL
+    - 按需使用 Redis
+    - 按需使用 SQLite
+- 部署：
+    - Docker
+- 其他:
+    - 依赖安装使用 Bun
+
+## 项目结构
+- `src/` - 源代码目录
+- `public/` - 静态资源目录
+- `docs/` - 文档目录
+- `tests/` - 测试文件目录
