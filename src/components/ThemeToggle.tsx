@@ -1,7 +1,6 @@
 'use client';
 
 import { useTheme } from '@/hooks/useTheme';
-import { Button } from './Button';
 
 /**
  * 主题切换组件
@@ -11,10 +10,10 @@ export function ThemeToggle() {
   const { resolvedTheme, toggleTheme } = useTheme();
 
   return (
-    <Button
+    <button
+      type="button"
       onClick={toggleTheme}
-      variant="outline"
-      className="w-10 h-10 p-0"
+      className="w-10 h-10 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center transition-colors text-gray-700 dark:text-gray-300"
       aria-label={`切换到${resolvedTheme === 'dark' ? '浅色' : '深色'}模式`}
     >
       {resolvedTheme === 'dark' ? (
@@ -54,7 +53,7 @@ export function ThemeToggle() {
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       )}
-    </Button>
+    </button>
   );
 }
 
