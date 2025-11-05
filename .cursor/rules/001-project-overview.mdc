@@ -29,7 +29,17 @@ alwaysApply: true
     - 依赖安装使用 Bun
 
 ## 项目结构
-- `src/` - 源代码目录
+- `src/` - 源代码目录，包含：
+    - `app/` - Next.js App Router 路由和页面
+    - `components/` - React 组件
+    - `hooks/` - 自定义 React Hooks
+    - `services/` - 业务逻辑服务
+    - `utils/` - 工具函数
+    - `constants/` - 常量定义
+    - `types/` - TypeScript 类型定义
+- `types/` - 根目录类型定义（如路由类型等）
 - `public/` - 静态资源目录
 - `docs/` - 文档目录
 - `tests/` - 测试文件目录
+- `.env` - 环境变量
+- `.gitignore` - 忽略某些提交, 使用通用模版

@@ -10,12 +10,13 @@ alwaysApply: true
 3. 数据访问层 - API调用和数据处理
 
 ## 目录结构说明
+- `src/app/` - Next.js App Router 路由和页面目录
 - `src/components/` - 所有UI组件，按功能分子目录
 - `src/hooks/` - 自定义React Hooks，封装复用逻辑
 - `src/services/` - 业务逻辑服务，包含API调用
 - `src/utils/` - 工具函数，纯函数，无副作用
 - `src/constants/` - 常量定义
-- `src/types/` - TypeScript类型定义
+- `src/types/` - TypeScript类型定义（与根目录的 `types/` 目录配合使用）
 
 ## 数据流向
 1. 用户交互触发组件内事件处理函数
