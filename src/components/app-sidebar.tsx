@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { useSession } from "@/lib/auth-client"
 import {
   IconCamera,
@@ -153,11 +152,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const userData = session?.user ? {
     name: session.user.name || "User",
     email: session.user.email,
-    avatar: session.user.image || "/codeguide-logo.png",
+    avatar: session.user.image || undefined,
   } : {
     name: "Guest",
     email: "guest@example.com", 
-    avatar: "/codeguide-logo.png",
+    avatar: undefined,
   }
 
   return (
@@ -169,9 +168,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <Link href="/">
-                <Image src="/codeguide-logo.png" alt="CodeGuide" width={32} height={32} className="rounded-lg" />
-                <span className="text-base font-semibold font-parkinsans">CodeGuide</span>
+              <Link href="/" className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <IconDashboard className="h-5 w-5" />
+                </div>
+                <span className="text-base font-semibold">Dashboard</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
