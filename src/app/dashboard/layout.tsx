@@ -1,56 +1,36 @@
-import { ReactNode } from 'react';
+import { cookies } from "next/headers"
 
-/**
- * Dashboard 布局组件
- * 提供统一的 Dashboard 页面布局，包括侧边栏和主内容区
- */
-export default function DashboardLayout({
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
+import { SiteHeader } from "@/components/site-header"
+
+import "@/app/dashboard/theme.css"
+
+export default async function DashboardLayout({
   children,
 }: {
-  children: ReactNode;
+  children: React.ReactNode
 }) {
+  const cookieStore = await cookies()
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
+
   return (
-    <div className="flex min-h-screen">
-      {/* 侧边栏 */}
-      <aside className="w-64 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-        <nav className="p-4">
-          <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
-            Dashboard
-          </h2>
-          <ul className="space-y-2">
-            <li>
-              <a
-                href="/dashboard"
-                className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                首页
-              </a>
-            </li>
-            <li>
-              <a
-                href="/dashboard/profile"
-                className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                个人资料
-              </a>
-            </li>
-            <li>
-              <a
-                href="/dashboard/settings"
-                className="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                设置
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-
-      {/* 主内容区 */}
-      <main className="flex-1 p-8 bg-gray-50 dark:bg-gray-950">
-        {children}
-      </main>
-    </div>
-  );
+    <SidebarProvider
+      defaultOpen={defaultOpen}
+      style={
+        {
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        <SiteHeader />
+        <div className="flex flex-1 flex-col">{children}</div>
+      </SidebarInset>
+    </SidebarProvider>
+  )
 }
-

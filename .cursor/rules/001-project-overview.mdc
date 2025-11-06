@@ -15,7 +15,7 @@ alwaysApply: true
     - React 19
     - Eslint
     - TypeScript
-    - Tailwind CSS v4
+    - Tailwind CSS v4 + Style-
 - 后端：
     - Next.js API Routes（Next.js 内置 API 路由）
     - 当前未集成 Express（未来如需复杂路由可考虑）
