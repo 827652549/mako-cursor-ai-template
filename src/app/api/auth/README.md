@@ -50,3 +50,12 @@ const { data: session } = useSession();
 - `NEXT_PUBLIC_BETTER_AUTH_URL` - 前端可访问的认证服务 URL
 - `DATABASE_URL` - 数据库连接字符串
 
+## 会话配置
+
+当前配置的会话过期时间为 **24 小时**：
+
+- `expiresIn: 60 * 60 * 24` - 会话在 24 小时后过期
+- `updateAge: 60 * 60 * 24` - 在 24 小时内更新会话
+
+这意味着用户登录后，会话将保持 24 小时有效。如果需要修改过期时间，可以在 `src/lib/auth.ts` 中调整 `session.expiresIn` 的值（以秒为单位）。
+

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { signIn } from "@/lib/auth-client";
+import { signIn, useSession } from "@/lib/auth-client";
 import { Loader2 } from "lucide-react";
 
 export default function SignInPage() {
@@ -17,6 +17,14 @@ export default function SignInPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
+    const { data: session, isPending } = useSession();
+
+    // 如果用户已登录，重定向到仪表盘
+    useEffect(() => {
+        if (!isPending && session?.user) {
+            router.push("/dashboard");
+        }
+    }, [session, isPending, router]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -40,6 +48,15 @@ export default function SignInPage() {
             setIsLoading(false);
         }
     };
+
+    // 如果正在检查登录状态或已登录，显示加载状态或重定向
+    if (isPending || session?.user) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-background">
+                <p className="text-lg text-muted-foreground">加载中...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-background px-4">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { signUp } from "@/lib/auth-client";
+import { signUp, useSession } from "@/lib/auth-client";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 
 const signUpSchema = z.object({
@@ -35,6 +35,14 @@ export default function SignUpPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const router = useRouter();
+    const { data: session, isPending } = useSession();
+
+    // 如果用户已登录，重定向到仪表盘
+    useEffect(() => {
+        if (!isPending && session?.user) {
+            router.push("/dashboard");
+        }
+    }, [session, isPending, router]);
 
     const form = useForm<SignUpForm>({
         resolver: zodResolver(signUpSchema),
@@ -70,6 +78,15 @@ export default function SignUpPage() {
             setIsLoading(false);
         }
     };
+
+    // 如果正在检查登录状态或已登录，显示加载状态或重定向
+    if (isPending || session?.user) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-background">
+                <p className="text-lg text-muted-foreground">加载中...</p>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8">

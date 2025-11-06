@@ -114,6 +114,7 @@ src/
 - [x] shadcn/ui 组件库
 - [x] 主题切换（深色/浅色模式）
 - [x] Better Auth 认证系统
+- [x] 会话管理（24 小时有效期）
 - [x] Drizzle ORM + PostgreSQL
 - [x] 登录/注册页面
 - [x] 仪表盘布局和页面
