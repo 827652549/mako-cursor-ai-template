@@ -35,14 +35,37 @@ Success will be measured by how quickly a developer can spin up a working Next.j
 
 ### 当前项目状态（实际）
 
-**注意：** 当前项目是一个**基础模板**，尚未实现以下功能（这些功能在 PRD 中列为 In-Scope，但实际未实现）：
+**注意：** 当前项目是一个**功能完整的 MVP 模板**，已实现 PRD 中定义的核心功能：
 
-*   **Authentication**: Better Auth - ❌ 未实现
-*   **Database**: Drizzle ORM + PostgreSQL - ❌ 未实现
-*   **UI Foundation**: shadcn/ui - ❌ 未实现（当前只有基础 Button 组件）
-*   **Theming**: Dark mode toggle - ❌ 未实现（只有 CSS 变量定义）
-*   **Containerization**: Docker Compose - ❌ 未实现
-*   **Feature Blueprint**: `/app/dashboard/` - ❌ 未实现
+*   **Authentication**: Better Auth - ✅ **已实现**
+    *   登录/注册页面
+    *   会话管理（24 小时有效期）
+    *   认证 API 路由
+    *   主页登录状态检查（登录后显示进入后台和退出登录按钮）
+
+*   **Database**: Drizzle ORM + PostgreSQL - ✅ **已实现**
+    *   数据库连接配置
+    *   认证相关 schema（user, session, account, verification）
+    *   数据库迁移脚本支持
+
+*   **UI Foundation**: shadcn/ui - ✅ **已实现**
+    *   完整集成 shadcn/ui 组件库（40+ 组件）
+    *   所有组件位于 `src/components/ui/` 目录
+
+*   **Theming**: Dark mode toggle - ✅ **已实现**
+    *   主题切换组件（ThemeToggle）
+    *   支持 light/dark/system 三种模式
+    *   使用 next-themes 进行持久化
+
+*   **Containerization**: Docker Compose - ✅ **已实现**
+    *   Dockerfile（多阶段构建）
+    *   docker-compose.yml（Next.js + PostgreSQL）
+    *   支持一键启动开发环境
+
+*   **Feature Blueprint**: `/app/dashboard/` - ✅ **已实现**
+    *   仪表盘布局（包含侧边栏和头部）
+    *   仪表盘首页（包含统计卡片、图表、数据表格）
+    *   多个功能页面（analytics, projects, settings 等）
 
 **已实现的功能：**
 *   ✅ Next.js App Router 基础结构
@@ -51,48 +74,71 @@ Success will be measured by how quickly a developer can spin up a working Next.j
 *   ✅ Jest + React Testing Library 测试配置
 *   ✅ 基础组件结构（components, hooks, services, utils）
 *   ✅ 基础工具函数（apiClient, errorHandler）
+*   ✅ Better Auth 认证系统
+*   ✅ Drizzle ORM + PostgreSQL
+*   ✅ shadcn/ui 组件库
+*   ✅ 主题切换功能
+*   ✅ Docker 配置
+*   ✅ 仪表盘功能蓝图
 
 ## 3. User Flow
 
 **New Visitor to Dashboard**
 
-1.  A user visits the homepage (`/`). They see a clean landing page with a header, a dark mode toggle, and links to "Sign Up" and "Log In."
-2.  They click "Sign Up," fill in email and password, and submit. The form calls the Better Auth API route. On success, the user is redirected to `/dashboard`.
+1.  A user visits the homepage (`/`). They see a clean landing page with a header, a dark mode toggle, and links to "Sign Up" and "Log In." ✅ **已实现**
+2.  They click "Sign Up," fill in email and password, and submit. The form calls the Better Auth API route. On success, the user is redirected to `/dashboard`. ✅ **已实现**
 
 **Returning User Experience**
 
-1.  A returning user selects "Log In," enters credentials, and is authenticated via the same API route.
-2.  After login, they arrive at `/dashboard`: a layout with a left sidebar (links to Dashboard, Profile, Settings) and a main area showing a welcome message, recent activity, and placeholder cards.
-3.  The user can toggle dark/light mode at any time; their preference is saved and applied on subsequent visits.
+1.  A returning user selects "Log In," enters credentials, and is authenticated via the same API route. ✅ **已实现**
+2.  After login, they arrive at `/dashboard`: a layout with a left sidebar (links to Dashboard, Profile, Settings) and a main area showing a welcome message, recent activity, and placeholder cards. ✅ **已实现**
+3.  The user can toggle dark/light mode at any time; their preference is saved and applied on subsequent visits. ✅ **已实现**
+
+**Logged-in User on Homepage**
+
+1.  When a logged-in user visits the homepage (`/`), they see a personalized welcome message with their name/email. ✅ **已实现**
+2.  They see two buttons: "进入后台" (Enter Dashboard) and "退出登录" (Sign Out). ✅ **已实现**
+3.  Clicking "进入后台" takes them to `/dashboard`. ✅ **已实现**
+4.  Clicking "退出登录" signs them out and refreshes the page to show the login/register buttons. ✅ **已实现**
 
 ## 4. Core Features
 
-*   **User Authentication**\
+*   **User Authentication** ✅ **已实现**\
     • Secure registration, login, logout, session handling (Better Auth).\
-    • API routes under `/app/api/auth/[...all]/route.ts`.
-*   **Database Integration**\
+    • API routes under `/src/app/api/auth/[...all]/route.ts`.\
+    • Session expiration set to 24 hours.\
+    • Homepage login state check with dashboard entry and sign-out buttons.
+*   **Database Integration** ✅ **已实现**\
     • Drizzle ORM + PostgreSQL.\
-    • Pre-configured `auth` schema in `/db/schema/auth.ts`.
-*   **UI Component Library**\
-    • Unstyled primitives from shadcn/ui in `/components/ui`.\
-    • Utility classes via Tailwind CSS v4.
-*   **Dark Mode & Theming**\
-    • Theme toggle component, context hook, and cookie persistence.
-*   **Routing & Layouts**\
-    • Next.js App Router with nested layouts: global (`/app/layout.tsx`), dashboard (`/app/dashboard/layout.tsx`).
-*   **One-Command Docker Setup**\
+    • Pre-configured `auth` schema in `/src/db/schema/auth.ts`.\
+    • Database migration scripts support.
+*   **UI Component Library** ✅ **已实现**\
+    • Complete shadcn/ui component library (40+ components) in `/src/components/ui`.\
+    • Utility classes via Tailwind CSS v4.\
+    • All components are properly typed and accessible.
+*   **Dark Mode & Theming** ✅ **已实现**\
+    • Theme toggle component (`ThemeToggle`), context hook (`ThemeProvider`), and cookie persistence via `next-themes`.\
+    • Supports light, dark, and system modes.
+*   **Routing & Layouts** ✅ **已实现**\
+    • Next.js App Router with nested layouts: global (`/src/app/layout.tsx`), dashboard (`/src/app/dashboard/layout.tsx`).\
+    • Login/register pages (`/src/app/sign-in`, `/src/app/sign-up`).\
+    • Homepage with login state awareness (`/src/app/page.tsx`).
+*   **One-Command Docker Setup** ✅ **已实现**\
     • `docker-compose.yml` for Next.js server and Postgres instance.\
+    • `Dockerfile` with multi-stage build.\
     • `.env.example` for required environment variables.
-*   **Feature Blueprint**\
-    • Example `/app/dashboard/` directory to guide adding new sections (e.g., `/app/dashboard/products`).
+*   **Feature Blueprint** ✅ **已实现**\
+    • Complete `/src/app/dashboard/` directory with layout, homepage, and multiple feature pages.\
+    • Example pages: analytics, projects, settings, team, reports, etc.\
+    • Reusable components: sidebar, header, charts, data tables.
 
 ## 5. Tech Stack & Tools
 
 *   **Frontend**: Next.js (App Router), React, TypeScript ✅
-*   **Styling**: Tailwind CSS v4 ✅, shadcn/ui component primitives ❌（计划中）
-*   **Backend**: Next.js API Routes ✅, Better Auth ❌（计划中）, Drizzle ORM ❌（计划中）
-*   **Database**: PostgreSQL container ❌（计划中）
-*   **Containerization**: Docker, Docker Compose ❌（计划中）
+*   **Styling**: Tailwind CSS v4 ✅, shadcn/ui component primitives ✅（已完整集成）
+*   **Backend**: Next.js API Routes ✅, Better Auth ✅（已实现）, Drizzle ORM ✅（已实现）
+*   **Database**: PostgreSQL container ✅（已配置）
+*   **Containerization**: Docker, Docker Compose ✅（已配置）
 *   **Testing**: Jest & React Testing Library ✅（已配置）
 *   **Development**: Node.js LTS (v18+), Bun/npm/Yarn, VS Code (recommended) ✅
 

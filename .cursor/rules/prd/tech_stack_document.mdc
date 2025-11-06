@@ -20,21 +20,21 @@ The frontend is everything your users see and interact with. Here's what we use 
     *   React powers the interactive parts of your UI.
     *   TypeScript adds type safety, catching mistakes early and making your code easier to understand.
 
-*   **shadcn/ui** ❌ **未实现（计划中）**
+*   **shadcn/ui** ✅ **已实现**
 
     *   A set of unstyled component building blocks (buttons, forms, dialogs) you fully control.
     *   Speeds up UI assembly while letting you customize every detail to match your brand.
-    *   **当前状态**: 项目只有基础 Button 组件，未集成 shadcn/ui。
+    *   **当前状态**: 已完整集成 shadcn/ui 组件库，包含所有常用组件（Button, Card, Input, Form, Dialog, Table, Chart 等 40+ 组件），位于 `src/components/ui/` 目录。
 
 *   **Tailwind CSS v4** ✅ **已实现**
 
     *   A utility-first styling tool that keeps styles consistent and keeps your CSS code small.
     *   Works hand-in-hand with shadcn/ui to apply colors, layouts, and responsive designs quickly.
 
-*   **Dark Mode Support** ⚠️ **部分实现**
+*   **Dark Mode Support** ✅ **已实现**
 
     *   A pre-built toggle and theme system lets users switch between light and dark modes seamlessly.
-    *   **当前状态**: CSS 变量已定义，但缺少主题切换组件和持久化逻辑。
+    *   **当前状态**: 已完整实现主题切换功能，包括 `ThemeProvider`、`ThemeToggle` 组件，支持 light/dark/system 三种模式，使用 `next-themes` 进行持久化。
 
 ## 2. Backend Technologies
 
@@ -44,35 +44,35 @@ The backend powers your app's logic, data storage, and authentication. Here's wh
 
     *   Lets you write server-side code (like an API) right alongside your frontend pages.
     *   Simplifies project structure: you don't need a separate backend service.
-    *   **当前状态**: 基础结构已就绪，但尚未创建任何 API 路由。
+    *   **当前状态**: 已创建 API 路由结构，包括认证 API（`/api/auth/[...all]`）和健康检查端点（`/api/health`）。
 
-*   **Better Auth** ❌ **未实现（计划中）**
+*   **Better Auth** ✅ **已实现**
 
     *   A ready-made authentication solution for user registration, login, and session handling.
     *   Secure and production-ready, so you don't have to build auth flows from scratch.
-    *   **当前状态**: 未集成，项目中有基础的 apiClient 和 errorHandler 工具函数。
+    *   **当前状态**: 已完整集成 Better Auth，包括服务端配置（`src/lib/auth.ts`）、客户端配置（`src/lib/auth-client.ts`）、API 路由（`/api/auth/[...all]`）、登录/注册页面，会话过期时间设置为 24 小时。
 
-*   **Drizzle ORM** ❌ **未实现（计划中）**
+*   **Drizzle ORM** ✅ **已实现**
 
     *   A TypeScript-friendly tool for talking to your database without raw SQL.
     *   Ensures your queries are type-safe and catch errors at compile time.
-    *   **当前状态**: 未集成，项目中不存在 `/db` 目录。
+    *   **当前状态**: 已完整集成 Drizzle ORM，包括数据库连接配置（`src/db/index.ts`）、认证相关 schema（`src/db/schema/auth.ts`）、Drizzle Kit 配置（`drizzle.config.ts`），支持数据库迁移脚本。
 
-*   **PostgreSQL** ❌ **未实现（计划中）**
+*   **PostgreSQL** ✅ **已实现**
 
     *   A powerful, open-source relational database for storing user data and your app's records.
     *   Works seamlessly with Drizzle for migrations and queries.
-    *   **当前状态**: 未配置数据库连接。
+    *   **当前状态**: 已配置 PostgreSQL，通过 Docker Compose 提供数据库服务，支持通过环境变量配置连接。
 
 ## 3. Infrastructure and Deployment
 
 These decisions help you set up, test, and ship your app consistently, no matter who's doing it or where it runs:
 
-*   **Docker & Docker Compose** ❌ **未实现（计划中）**
+*   **Docker & Docker Compose** ✅ **已实现**
 
     *   Containerizes both the Next.js app and PostgreSQL database.
     *   With `docker-compose up`, you get an identical development environment on any machine.
-    *   **当前状态**: 项目中不存在 `docker-compose.yml` 或 `Dockerfile`。
+    *   **当前状态**: 已配置 Docker 和 Docker Compose，包括 `Dockerfile`（多阶段构建）和 `docker-compose.yml`（包含 Next.js 应用和 PostgreSQL 数据库），支持一键启动开发环境。
 
 *   **Git & GitHub (or other Git service)**
 
@@ -140,18 +140,21 @@ We’ve built in safeguards and speed optimizations so your MVP runs smoothly an
 
 ## 6. Conclusion and Overall Tech Stack Summary
 
-**当前项目状态**: 这是一个**基础模板**，已实现核心框架，但尚未集成完整的功能栈。
+**当前项目状态**: 这是一个**功能完整的 MVP 模板**，已实现核心功能栈，可以直接用于开发。
 
 **已实现:**
-*   **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS v4
+*   **Frontend:** Next.js 16, React 19, TypeScript, Tailwind CSS v4, shadcn/ui 组件库（40+ 组件）
+*   **UI/UX:** 主题切换（深色/浅色模式），响应式设计，完整的组件系统
+*   **Backend:** Better Auth 认证系统，Next.js API Routes，会话管理（24 小时有效期）
+*   **Database:** Drizzle ORM + PostgreSQL，数据库迁移脚本，认证 schema
+*   **Infra & Deployment:** Docker & Docker Compose，一键启动开发环境
 *   **Testing:** Jest + React Testing Library
-*   **Code Organization:** 清晰的目录结构（components, hooks, services, utils）
+*   **Code Organization:** 清晰的目录结构（components, hooks, services, utils, db, lib）
+*   **Features:** 登录/注册页面，仪表盘布局和页面，主页登录状态检查
 
-**计划实现（PRD 中定义）:**
-*   **Frontend:** shadcn/ui, dark mode toggle
-*   **Backend:** Better Auth, Drizzle ORM, PostgreSQL
-*   **Infra & Deployment:** Docker & Docker Compose
-*   **Third-Party:** Ready-made auth, optional email, monitoring, analytics
-*   **Security & Performance:** Type safety, secure auth, server-first rendering, caching, rate limiting
+**待实现（可选功能）:**
+*   **Third-Party:** 邮件服务集成（密码重置），OAuth 登录（Google, GitHub 等）
+*   **Advanced:** 用户资料管理，权限系统，API 文档，监控和日志服务
+*   **Performance:** Redis 缓存，高级缓存策略，速率限制
 
-**注意**: 当前项目是一个起始模板，为后续功能扩展提供了良好的基础架构。开发者可以根据 PRD 文档逐步添加所需功能。
+**注意**: 当前项目已具备完整的 MVP 基础功能，包括认证、数据库、UI 组件库和部署配置。开发者可以直接在此基础上构建业务功能。

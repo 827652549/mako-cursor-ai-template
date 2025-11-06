@@ -37,8 +37,8 @@ This document explains how the **nextjs-mvp-starter-template** is built on the f
 - **Component Primitives:** `shadcn/ui` provides unstyled React components you style with Tailwind.
 
 ### Theming
-- **Dark Mode:** Built-in toggle. Uses Tailwind’s `dark:` variants and persists the user’s preference in local storage.
-- **Global Styles:** Defined in `app/globals.css` with base resets and theme variables.
+- **Dark Mode:** ✅ **已实现** Built-in toggle (`ThemeToggle` component). Uses `next-themes` for theme management, Tailwind's `dark:` variants, and persists the user's preference via cookies. Supports light, dark, and system modes.
+- **Global Styles:** ✅ **已实现** Defined in `src/app/globals.css` with base resets, theme variables (shadcn/ui compatible), and utility classes.
 
 ### Visual Style
 - **Overall Look:** Modern flat design with clean lines and subtle shadows.
@@ -57,11 +57,11 @@ This document explains how the **nextjs-mvp-starter-template** is built on the f
 ## Component Structure
 
 - **Directory Layout:**
-  - `/app` – Page and layout definitions matching your URL structure.
-  - `/components` – Shared React components (buttons, cards, forms).
-  - `/components/ui` – Core UI primitives from `shadcn/ui`.
-  - `/lib` – Utility functions (e.g., auth client, formatters).
-  - `/db` – Drizzle ORM schemas.
+  - `/src/app` – ✅ **已实现** Page and layout definitions matching your URL structure (homepage, dashboard, sign-in, sign-up, API routes).
+  - `/src/components` – ✅ **已实现** Shared React components (app-sidebar, site-header, theme-toggle, chart-area-interactive, data-table, etc.).
+  - `/src/components/ui` – ✅ **已实现** Complete shadcn/ui component library (40+ components: Button, Card, Input, Form, Dialog, Table, Chart, etc.).
+  - `/src/lib` – ✅ **已实现** Utility functions (auth client, auth server config, utils like `cn` function).
+  - `/src/db` – ✅ **已实现** Drizzle ORM schemas and database connection.
 
 - **Reusability:** Each component lives in its own folder with an optional sub-folder for related styles or tests. This makes copying or swapping them in new MVPs trivial.
 
@@ -104,14 +104,20 @@ This document explains how the **nextjs-mvp-starter-template** is built on the f
 
 ## Conclusion and Overall Frontend Summary
 
-This template brings together best-in-class tools—Next.js, TypeScript, shadcn/ui, Tailwind CSS, Better Auth, Drizzle ORM, and Docker—to give you a rock-solid starting point for any MVP. You get:
+This template brings together best-in-class tools—Next.js, TypeScript, shadcn/ui, Tailwind CSS, Better Auth, Drizzle ORM, and Docker—to give you a rock-solid starting point for any MVP. ✅ **所有核心功能已实现**
 
-- A well-organized, scalable architecture.
-- Clear design principles for usability, accessibility, and consistency.
-- A modern, flat visual style with built-in dark mode.
-- Reusable, testable components.
-- Simple state management and routing conventions.
-- Built-in performance optimizations and an easy path to add more.
-- A testing foundation that you can expand.
+**已实现的功能:**
+- ✅ A well-organized, scalable architecture with complete directory structure.
+- ✅ Clear design principles for usability, accessibility, and consistency.
+- ✅ A modern, flat visual style with built-in dark mode toggle (light/dark/system).
+- ✅ Complete shadcn/ui component library (40+ reusable, testable components).
+- ✅ Simple state management (React Context for theme, Better Auth for session) and routing conventions.
+- ✅ Built-in performance optimizations (Server Components, code splitting, image optimization).
+- ✅ A testing foundation (Jest + React Testing Library) that you can expand.
+- ✅ Complete authentication flow (login, register, session management with 24-hour expiration).
+- ✅ Dashboard layout and pages with sidebar, header, charts, and data tables.
+- ✅ Homepage with login state awareness (shows dashboard entry and sign-out buttons for logged-in users).
+
+**当前项目状态**: 这是一个**功能完整的 MVP 模板**，所有核心前端功能已实现，可以直接用于开发。
 
 Everything is set up so you can focus on building the unique features of your MVP, rather than reinventing the same foundations. Happy building!
